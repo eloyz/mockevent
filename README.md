@@ -179,7 +179,7 @@ Here we write our own `stream` method that loops through data and sends.  Still 
 
 ### Roadmap
 
-* Unit tests: Long story short, I had them, updated them, but didn't want to prolong the publishing of this library any longer.
+* Unit tests: Long story short, I had them, updated code and then didn't want to prolong the publishing of this library any longer.
 * Data from a file: You can set your responses in the javascript file, but reading from a JSON file would be nice.
 * `setInterval` range: Right now the frequency of responeses sent is static, I'd like the option to send between a random range of miliseconds.
 
