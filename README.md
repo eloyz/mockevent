@@ -1,7 +1,7 @@
 
 # MockEvent
 
-MockEvent simulates a [Server Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events).
+MockEvent simulates [Server Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events).
 
 Useful if you want to build the client side portion without having the server side portion available to you. Also useful when writing unit tests.
 
