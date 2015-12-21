@@ -36,7 +36,7 @@ MockEvent({
 })
 
 // Instantiating an `EventSource` ----------
-var evtSource = new EventSource('/tweet');
+var evtSource = new EventSource('/tweets');
 
 // Listening to specific event names and handling them
 evtSource.addEventListener('tweet', function(e){ console.log(e)}, false);
@@ -57,7 +57,6 @@ How to create a basic MockEvent aka simulate Server Sent Events.
 // Instantiate a `MockeEvent` ----------
 var mockEvent = new MockEvent({
     url: '/tweets',
-    namespace: API_URI,
     setInterval: 100,
     responses: [
         {name: 'first_tweet', data: 'first tweet'},
@@ -69,7 +68,7 @@ var mockEvent = new MockEvent({
 });
 
 // Instantiate an `EventSource` ----------
-var evtSource = new EventSource(API_URI + '/tweet');
+var evtSource = new EventSource('/tweets');
 
 // Listening to specific event names and handling them
 evtSource.addEventListener('first_tweet', function(e){ console.log('first tweet', e)}, false);
@@ -82,8 +81,7 @@ evtSource.onerror = function(e){log('TWEET CONNECTION GO BOOM', e.message)};
 </script>
 ```
 
-* `url`: The relative or absolute URL can go here.  If you choose to use a relative URL, it's prepended with your current host (e.g. `http://example.com/`). If you provide a `namespace`, then the `namespace` is prepended.
-* `namespace`: The baseURL that is prepended to the `url` value. Sidenote: will probably rename to `baseURL` in the near future.
+* `url`: The relative URL for your Server Sent Event API.  This is the URL we will subscribe to via `EventSource`.
 * `setInterval`: Miliseconds to wait before sending the next event/response.
 * `responses`: A list of event/responses to send and the order in which to send them.
     - `name`: Server Sent Events can have a name that you directly subscribe to in case you want to handle that name differently. In the above example we require you to subscribe to 3 different names `first_tweet`, `tweet`, and `last_tweet`.  Making it easier to provide your logic on the client side.  Maybe you want to do some initializing when the first tweet comes in so you put that logic in the that handler.  Maybe you want to tear down some logic or disconnect for the URL on the last tweet. The point is that you can make and subscribe to as many names as you want to make your logic easier to write and undertand.
@@ -103,7 +101,6 @@ Dynamically make responses and then stream them.
 // Instantiate a `MockeEvent` ----------
 var mockEvent = new MockEvent({
     url: '/tweets',
-    namespace: API_URI,
     setInterval: 100,
     response: function(self, evtSource){
         /* If you would like to somehow customize the responses
@@ -120,7 +117,7 @@ var mockEvent = new MockEvent({
 });
 
 // Instantiate an `EventSource` ----------
-var evtSource = new EventSource(API_URI + '/tweet');
+var evtSource = new EventSource('/tweets');
 
 // Listening to specific event name and handle
 evtSource.addEventListener('tweet', function(e){ console.log('tweet', e)}, false);
@@ -145,7 +142,6 @@ Use the `MockEvent` and `EventSource` object when creating your responses.
 // Instantiate a `MockeEvent` ----------
 var mockEvent = new MockEvent({
     url: '/tweets',
-    namespace: API_URI,
     setInterval: 100,
     response: function(self, evtSource){
         /* If you would like to somehow customize the responses
@@ -165,7 +161,7 @@ var mockEvent = new MockEvent({
 });
 
 // Instantiate an `EventSource` ----------
-var evtSource = new EventSource(API_URI + '/tweet');
+var evtSource = new EventSource('/tweets');
 
 // Listening to specific event name and handle
 evtSource.addEventListener('tweet', function(e){ console.log('tweet', e)}, false);
