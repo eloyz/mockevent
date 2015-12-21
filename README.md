@@ -134,7 +134,7 @@ This uses the `response` attribute instead of the plural `responses` method.  He
 
 #### Example 3
 
-Dynamically make responses and then stream them.
+Use the `MockEvent` and `EventSource` object when creating your responses.
 ```javascript
 
 // In the head of your HTML
