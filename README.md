@@ -28,12 +28,12 @@ Getting started with the least amount of work.
 <script>
 // Instantiate a `MockeEvent` ----------
 MockEvent({
-    url: '/tweet',
+    url: '/tweets',
     responses: [
         {name: 'tweet', data: 'a tweet'},
         {name: 'tweet', data: 'another tweet'}
     ]
-})
+});
 
 // Instantiating an `EventSource` ----------
 var evtSource = new EventSource('/tweets');
