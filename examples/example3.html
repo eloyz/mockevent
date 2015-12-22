@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mock Stream Testing</title>
+    <script src='bin/underscore-1.8.3.js'></script>
+    <script src='bin/mockevent.js'></script>
+</head>
+<body>
+    <script>
+
+    // Instantiate a `MockeEvent` ----------
+    var mockEvent = new MockEvent({
+        url: '/tweets',
+        setInterval: 100,
+        response: function(self, evtSource){
+            /* If you would like to somehow customize the responses
+            dynamically, this is one way. */
+            var data = [
+                {name: 'tweet', data: 'a tweet'},
+                {name: 'tweet', data: 'another tweet'}
+            ];
+
+            /* Here we use the `self.send` and `self.setInterval` attributes
+            from the mockEvent object. To build our own streaming method. */
+            var intervalId = setInterval(function(){
+                var val = data.shift() || clearInterval(intervalId);
+                if(val) self.send(val);
+            }, self.setInterval)
+        }
+    });
+
+    var evtSource = new EventSource('/tweets');
+
+    evtSource.onopen = function(e) {
+        this.addEventListener('tweet', function(e){ console.log('tweet', e)}, false);
+        this.addEventListener('first_tweet', function(e){ console.log('first tweet', e)}, false);
+        this.addEventListener('last_tweet', function(e){ console.log('last tweet', e)}, false);
+    }
+    evtSource.onerror = function(e){console.log('PLEASE CALL ME WHEN THERE IS AN ERROR', e.message)};
+
+    </script>
+</body>
+</html>
