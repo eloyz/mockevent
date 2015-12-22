@@ -4,7 +4,7 @@
         namespace: '',
         setTimeout: 0,
         setInterval: 0,
-        verbose: true,
+        verbose: false,
         on: true
     }
 
