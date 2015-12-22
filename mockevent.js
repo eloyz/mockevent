@@ -84,6 +84,8 @@
                 this.dispatchEvent(evt);
         },
         stream: function(responses){
+            /* Handling the stream output via this.setInterval attribute, 
+            ironically it's being handled with the `setTimeout` function. */
             var self = this;
 
             var streamIt = function(){
@@ -92,19 +94,33 @@
                     if(self.readyState === self.OPEN){
                         self.lastResponseId = response.id;
                         self.send(response);
+                        self.stream(responses);
                     } else {
                         if(MockEventGlobals.verbose){
                             console.warn("Missed response because EventSource.close()", response);
                         }
                     }
                 } else {
-                    clearInterval(intervalId);
-                    intervalId = false;
+                    clearTimeout(timeoutId);
+                    timeoutId = false;
                 }
             };
 
-            if(!intervalId){
-                var intervalId = setInterval(streamIt, self.setInterval);   
+            if(!timeoutId){
+                if(self.setInterval instanceof Array){
+                    var min = self.setInterval[0];
+                    var max = self.setInterval[1];
+                    var timeoutValue = Math.random() * (max - min) + min;
+                    var timeoutId = setTimeout(streamIt, timeoutValue);
+                } else {
+                    var timeoutValue = self.setInterval;
+                    var timeoutId = setTimeout(streamIt, timeoutValue);
+                }
+
+                // Logging on `verbose` = True
+                if(MockEventGlobals.verbose && responses.length){
+                    console.debug("Send stream in " + timeoutValue + " milliseconds.");
+                }
             }
         },
 

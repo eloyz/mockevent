@@ -101,7 +101,9 @@ Dynamically make responses and then stream them.
 // Instantiate a `MockeEvent` ----------
 var mockEvent = new MockEvent({
     url: '/tweets',
-    setInterval: 100,
+    /* If you would like to somehow customize the responses
+    dynamically, this is one way. */
+    setInterval: [100, 1000],
     response: function(self, evtSource){
         /* If you would like to somehow customize the responses
         dynamically, this is one way. */
@@ -127,7 +129,11 @@ evtSource.onerror = function(e){log('TWEET CONNECTION GO BOOM', e.message)};
 </script>
 ```
 
-This uses the `response` attribute instead of the plural `responses` method.  Here you can build build a list of responses to send and then stream them when you're ready.  The `stream` method respects the `setInterval` property you specified.  Technically you can use any method and then call `this.stream`. The benefit of using the `response` hook is that you get the `mockEvent` and `evtSource` object incase you need those values for anything.  Example 3 shows how you can benefit from these objects.
+This uses the `response` attribute instead of the plural `responses` method.  Here you can build build a list of responses to send and then stream them when you're ready.
+
+The `stream` method respects the `setInterval` property you specified. Also notice that `setInterval` can be set to an `int`, `float`, or `array` representing a min/max range of milliseconds.
+
+Technically you can use any method and then call `this.stream`. The benefit of using the `response` hook is that you get the `mockEvent` and `evtSource` object in case you need those values for anything.  Example 3 shows how you can benefit from these objects.
 
 #### Example 3
 
