@@ -101,8 +101,8 @@ Dynamically make responses and then stream them.
 // Instantiate a `MockeEvent` ----------
 var mockEvent = new MockEvent({
     url: '/tweets',
-    /* If you would like to somehow customize the responses
-    dynamically, this is one way. */
+    /* `setInterval` can be an integer, float, or range
+    representing milliseconds. [inclusive, exclusive] */
     setInterval: [100, 1000],
     response: function(self, evtSource){
         /* If you would like to somehow customize the responses
