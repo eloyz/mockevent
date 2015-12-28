@@ -118,19 +118,9 @@
 
         stop: function(){
             this.on = false;
-            clearInterval(this.intervalId);
-            this.intervalId = false;
         },
         start: function(){
             this.on = true;
-
-            // If you don't have a `last-event-id`
-            // Then we start you from 0
-            if(!this.lastResponseId){
-                delete this.responses;
-                this.responses = _.clone(this.allResponses);
-            }
-            this.stream();
         }
     };
 
