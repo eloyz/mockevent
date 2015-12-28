@@ -166,7 +166,7 @@
         // Creates event of type `error`
         self.error = function(message){
             var evt = new Event('error');
-            evt.error = new Error(message);
+            evt.error = message;
             if(self.onerror){
                 self.onerror(evt);
             }
@@ -236,6 +236,12 @@
                     mockHandler.stream(_.clone(mockHandler.responses));
                 }
             })
+
+            if(self.handler === undefined){
+                /* A handler was never found for this `EventSource`
+                instance. In this case we send a Timeout Error. */
+                self.error("Timeout Error");
+            }
 
         }, MockEventGlobals.setTimeout);
     };
