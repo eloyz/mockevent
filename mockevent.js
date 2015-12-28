@@ -1,7 +1,6 @@
 (function(window, undefined){
 
     window.MockEventGlobals = {
-        namespace: '',
         setTimeout: 0,
         setInterval: 0,
         verbose: false,
@@ -15,7 +14,6 @@
 
         id: null,
         url: '',
-        namespace: MockEventGlobals.namespace,
         setInterval: MockEventGlobals.setInterval,
         responses: [],
         response: null,
@@ -24,11 +22,6 @@
         allResponses: [],
 
         initialize: function(){
-
-            if(this.url.indexOf(this.namespace) < 0){
-                this.url = this.namespace + this.url;
-            }
-
             this.allResponses = this.allResponses.concat(this.responses);
         },
         headers: function(){
@@ -245,7 +238,7 @@
     window.MockEvent = function(settings){
         var i = mockHandlers.length;
         mockHandlers[i] = _.extend({}, baseHandler, settings, {id: i});
-        mockHandlers[i].initialize();  // Combines namespace` + `url`
+        mockHandlers[i].initialize();
         return mockHandlers[i];
     };
 
