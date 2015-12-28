@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Unit Tests</title>
+    <link rel="stylesheet" href="bin/qunit-1.20.0.css">
+    <script src="bin/qunit-1.20.0.js"></script>
+    <script src="bin/blanket-1.1.9.js" data-cover-flags="debug"></script>
+    <script src='bin/underscore-1.8.3.js'></script>
+    <script src="../mockevent.js" data-cover></script>
+
+    <script>
+
+        QUnit.test("Simple Handler", function(assert) {
+            assert.expect(1);
+
+            var mockEvent = MockEvent({
+                url: '/tweets',
+                responses: [
+                    {name: 'tweet', data: 'a tweet'}
+                ]
+            });
+
+            var evtSource = new EventSource('/tweets');
+            var done = assert.async();
+            evtSource.addEventListener('tweet', function(e){
+                assert.ok(true, "Response received");
+                mockEvent.clear();
+                done();
+            }, false);
+        });
+
+    </script>
+
+
+</head>
+<body>
+    <div id="qunit"></div>
+</body>
+</html>
