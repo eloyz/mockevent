@@ -72,9 +72,9 @@
             return 'mock-event-'+this.id+'-error';
         },
         dispatchError: function(errorMessage){
-                var evt = new Event(this.errorEventName());
-                evt.error = errorMessage;
-                this.dispatchEvent(evt);
+            var evt = new Event(this.errorEventName());
+            evt.error = errorMessage;
+            this.dispatchEvent(evt);
         },
         stream: function(responses){
             /* Handling the stream output via this.setInterval attribute, 
@@ -84,11 +84,12 @@
             var streamIt = function(){
                 if(responses.length){
                     var response = responses.shift();
-                    if(self.readyState === self.OPEN){
+                    if(self.evtSource.readyState === self.evtSource.OPEN){
                         self.lastResponseId = response.id;
                         self.send(response);
                         self.stream(responses);
                     } else {
+                        self.dispatchError("`EventSource` instance closed while sending.");
                         if(MockEventGlobals.verbose){
                             console.warn("Missed response because EventSource.close()", response);
                         }
@@ -112,7 +113,7 @@
 
                 // Logging on `verbose` = True
                 if(MockEventGlobals.verbose && responses.length){
-                    console.debug("Send stream in " + timeoutValue + " milliseconds.");
+                    console.info("Send stream in " + timeoutValue + " milliseconds.");
                 }
             }
         },
@@ -204,7 +205,9 @@
                     missed.push(self);
                     return;
                 }
+
                 self.handler = mockHandler;
+                mockHandler.evtSource = self;
 
                 // mockHandler dispatches error event
                 // EventSource calls `onerror` method
