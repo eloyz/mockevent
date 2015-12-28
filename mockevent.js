@@ -89,10 +89,8 @@
                         self.send(response);
                         self.stream(responses);
                     } else {
+                        if(MockEventGlobals.verbose) console.warn("Missed response because EventSource.close()", response);
                         self.dispatchError("`EventSource` instance closed while sending.");
-                        if(MockEventGlobals.verbose){
-                            console.warn("Missed response because EventSource.close()", response);
-                        }
                     }
                 } else {
                     clearTimeout(timeoutId);
