@@ -196,6 +196,10 @@
             if(mockHandlers.length === 0) missed.push(self);
 
             _.each(mockHandlers, function(mockHandler){
+
+                // `MockEvent` instance deleted
+                if(mockHandler === null) return;
+
                 if(!mockHandler.urlMatches(self.url)){
                     missed.push(self);
                     return;
