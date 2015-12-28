@@ -73,7 +73,7 @@
         },
         dispatchError: function(errorMessage){
                 var evt = new Event(this.errorEventName());
-                evt.error = new Error(errorMessage);
+                evt.error = errorMessage;
                 this.dispatchEvent(evt);
         },
         stream: function(responses){
