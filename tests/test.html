@@ -11,7 +11,7 @@
 
     <script>
 
-        QUnit.test("Simple Handler", function(assert){
+        QUnit.test("Basic Handler", function(assert){
             assert.expect(1);
 
             var mockEvent = MockEvent({
@@ -28,6 +28,61 @@
                 mockEvent.clear();
                 done();
             }, false);
+        });
+
+        QUnit.test("`onopen` listener", function(assert){
+            assert.expect(1);
+
+            var mockEvent = MockEvent({
+                url: '/tweets',
+                responses: [{name: 'tweet', data: 'a tweet'}]
+            });
+
+            var evtSource = new EventSource('/tweets');
+            var done = assert.async();
+            evtSource.onopen = function(e){
+                assert.ok(true, "Response received");
+                mockEvent.clear();
+                done();
+            };
+        });
+
+        QUnit.test("Handler requires response(s) method", function(assert){
+            assert.expect(1);
+
+            var mockEvent = MockEvent({url: '/tweets'});
+            var evtSource = new EventSource('/tweets');
+            var done = assert.async();
+            evtSource.onerror = function(e){
+                assert.ok(true, "Error received");
+                mockEvent.clear();
+                done();
+            };
+        });
+
+        QUnit.test("`response` method", function(assert){
+            assert.expect(1);
+
+            var mockEvent = MockEvent({
+                url: '/tweets',
+                response: function(handler, evtSource){
+                    /* If you would like to somehow customize the responses
+                    dynamically, this is one way. */
+                    var data = [{name: 'tweet', data: 'a tweet'}];
+
+                    /* In this case we have static data, but you can build that data
+                    however you choose and then stream it when you're ready. */
+                    handler.stream(data);
+                }
+            });
+
+            var evtSource = new EventSource('/tweets');
+            var done = assert.async();
+            evtSource.onopen = function(e){
+                assert.ok(true, "Response received");
+                mockEvent.clear();
+                done();
+            };
         });
 
         QUnit.test("Responses without name or data", function(assert){
@@ -72,6 +127,12 @@
                 mockEvent.clear();
                 done();
             };
+        });
+
+        QUnit.test("Request headers", function(assert){
+            assert.expect(1);
+            var evtSource = new EventSource('/tweets');
+            assert.ok(true, JSON.stringify(evtSource.headers()));
         });
 
         QUnit.test("Stop and Start Feature", function(assert){
