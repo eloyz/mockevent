@@ -179,11 +179,6 @@ evtSource.onerror = function(e){log('TWEET CONNECTION GO BOOM', e.message)};
 
 Here we write our own `stream` method that loops through data and sends.  Still respecting the `setInterval` attribute and leveraging the internal `send` method of the `mockEvent`.  This is not recommended, it's just used as an example to show the amount of access you have to all attributes.  Using the `send` method directly overwrites the `stream` attribute and will not respect other queues that maybe set by you later.
 
-### Roadmap
-
-* Unit tests: Long story short, I had them, updated code and then didn't want to prolong the publishing of this library any longer.
-* Data from a file: You can set your responses in the javascript file, but reading from a JSON file would be nice.
-
 ### Special Thanks
 
 Special thanks to [DecisioHealth](http://decisiohealth.com).  Where I work with talented developers and where they allow me to publish libraries for open source use.
