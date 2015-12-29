@@ -5,13 +5,13 @@
     <title>Unit Tests</title>
     <link rel="stylesheet" href="bin/qunit-1.20.0.css">
     <script src="bin/qunit-1.20.0.js"></script>
-    <script src="bin/blanket-1.1.9.js" data-cover-flags="debug"></script>
+    <script src="bin/blanket-1.1.9.js"></script>
     <script src='bin/underscore-1.8.3.js'></script>
     <script src="../mockevent.js" data-cover></script>
 
     <script>
 
-        QUnit.test("Simple Handler", function(assert) {
+        QUnit.test("Simple Handler", function(assert){
             assert.expect(1);
 
             var mockEvent = MockEvent({
@@ -29,6 +29,165 @@
                 done();
             }, false);
         });
+
+        QUnit.test("Responses without name or data", function(assert){
+            assert.expect(1);
+
+            var mockEvent = MockEvent({
+                url: '/tweets',
+                responses: [{}]
+            });
+
+            var evtSource = new EventSource('/tweets');
+            var done = assert.async();
+            evtSource.onerror = function(err){
+                assert.ok(true, "Handler requires `name` and `data` in response: " + JSON.stringify(err.error));
+                mockEvent.clear();
+                done();
+            };
+        });
+
+        QUnit.test("Sending response on closed `EventSource`", function(assert){
+            assert.expect(1);
+
+            MockEventGlobals.verbose = true;
+            var mockEvent = MockEvent({
+                url: '/tweets',
+                responses: [
+                    {name: 'tweet', data: 'a tweet'},
+                ]
+            });
+
+            var evtSource = new EventSource('/tweets');
+            evtSource.close();
+
+            var done = assert.async();
+            evtSource.addEventListener('tweet', function(e){
+                assert.ok(true, "Response received");
+            }, false);
+
+            evtSource.onerror = function(err){
+                assert.ok(true, JSON.stringify(err.error));
+                MockEventGlobals.verbose = false;
+                mockEvent.clear();
+                done();
+            };
+        });
+
+        QUnit.test("Stop and Start Feature", function(assert){
+            assert.expect(0);
+
+            var mockEvent = MockEvent({
+                url: '/test-stop-start',
+                responses: [
+                    {name: 'tweet', data: 'a tweet'}
+                ]
+            });
+
+            var evtSource = new EventSource('/test-stop-start');
+            var done = assert.async();
+            evtSource.addEventListener('tweet', function(e){
+                mockEvent.stop();
+                mockEvent.start();
+                mockEvent.clear();
+                done();
+            }, false);
+
+        });
+
+        QUnit.test("setInterval range", function(assert){
+            assert.expect(1);
+
+            var mockEvent = MockEvent({
+                url: '/tweets',
+                setInterval: [0, 10],
+                responses: [{name: 'tweet', data: 'a tweet'}]
+            });
+
+            var evtSource = new EventSource('/tweets');
+            var done = assert.async();
+            evtSource.addEventListener('tweet', function(e){
+                assert.ok(true, "Response received");
+                mockEvent.clear();
+                done();
+            }, false);
+        });
+
+        QUnit.test("URL mismatch", function(assert){
+            assert.expect(0);
+
+            var mockEvent = MockEvent({
+                url: '/tweets',
+                responses: [{name: 'tweet', data: 'a tweet'}]
+            });
+
+            var evtSource = new EventSource('/some-non-existent-url');
+            mockEvent.clear();
+        });
+
+        QUnit.test("Regex URL", function(assert){
+            assert.expect(1);
+
+            var mockEvent = MockEvent({
+                url: /some-crazy-regex-url/,
+                responses: [{name: 'tweet', data: 'a tweet'}]
+            });
+
+            var evtSource = new EventSource('/tweets');
+            var done = assert.async();
+            evtSource.onerror = function(err){
+                assert.ok(true, "Regex URL not found: " + JSON.stringify(err.error));
+                mockEvent.clear();
+                done();
+            };
+        });
+
+        QUnit.test("Blob URL", function(assert){
+            assert.expect(1);
+
+            var mockEvent = MockEvent({
+                url: 'some-blob-url-*',
+                responses: [{name: 'tweet', data: 'a tweet'}]
+            });
+
+            var evtSource = new EventSource('/tweets');
+            var done = assert.async();
+            evtSource.onerror = function(err){
+                assert.ok(true, "Regex URL not found: " + JSON.stringify(err.error));
+                mockEvent.clear();
+                done();
+            };
+
+        });
+
+        QUnit.test("Header method", function(assert){
+            assert.expect(1);
+
+            var mockEvent = MockEvent({
+                url: '/tweets',
+                responses: [{name: 'tweet', data: 'a tweet'}]
+            });
+
+            var headerInfo = JSON.stringify(mockEvent.headers());
+            assert.ok(headerInfo, "Call `headers` method: " + headerInfo);
+
+        });
+
+        QUnit.test("MockEvent class methods", function(assert){
+            assert.expect(3);
+
+            var mockEvent = MockEvent({
+                url: '/tweets',
+                responses: [{name: 'tweet', data: 'a tweet'}]
+            });
+
+            assert.ok(MockEvent.handlers() instanceof Array, 'MockEvent.handlers() returns list of handlers');
+            assert.ok(MockEvent.handlers(mockEvent.id), 'MockEvent.handlers(mockEvent.id) returns object');
+            assert.ok(MockEvent.missed() instanceof Array, 'MockEvent.missed() returns list of handlers');
+            MockEvent.clear(mockEvent.id);
+            MockEvent.clear();
+        });
+
 
     </script>
 
