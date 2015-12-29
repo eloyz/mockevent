@@ -143,9 +143,9 @@
                 'Accept-Language': window.navigator.languages.join(','),
                 'Cache-Control': 'no-cache',
                 'Connection': 'keep-alive',
-                'Cookie': docCookies.cookiesToString(),
+                // 'Cookie': docCookies.cookiesToString(),
                 'Host': window.location.host,
-                'Last-event-id': this.handler.lastResponseId || '',
+                // 'Last-event-id': this.handler.lastResponseId || '',
                 'Origin': window.location.protocol + '//' + window.location.host,
                 'Referer': window.location.protocol + '//' + window.location.host,
                 'User-Agent': window.navigator.userAgent
