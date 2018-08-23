@@ -1,0 +1,25 @@
+{
+  "name": "mockevent",
+  "main": "mockevent.js",
+  "homepage": "https://github.com/eloyz/mockevent",
+  "authors": [
+    "Eloy Zuniga Jr. <eloyz.email@gmail.com>"
+  ],
+  "description": "MockEvent simulates Server Sent Events.",
+  "keywords": [
+    "mock",
+    "test",
+    "server sent events"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "underscore": "^1.8.3"
+  }
+}
